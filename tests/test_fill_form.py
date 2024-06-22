@@ -10,6 +10,7 @@ import tests
 
 from data.user import Users
 from pages.registration_form import RegistrationPage
+from utils import attach
 
 registration_page = RegistrationPage()
 user=Users('Alexey', "Ostrovskiy", "a.a.ostrovskiy@mail.ru", "Male", "8911277596", 30, "May",
