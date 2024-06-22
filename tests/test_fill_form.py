@@ -20,7 +20,7 @@ user=Users('Alexey', "Ostrovskiy", "a.a.ostrovskiy@mail.ru", "Male", "8911277596
 @allure.story("Checking registration")
 @allure.feature("new tasks")
 @allure.link("https://demoqa.com", name="Testing")
-def test_student_registrate(open):
+def test_student_registrate(open_selenoid):
     # registration_page.fill_first_name()
     # registration_page.fill_last_name()
     # registration_page.fill_email()
