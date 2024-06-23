@@ -1,4 +1,7 @@
+import os
+
 import allure
+from dotenv import dotenv_values, load_dotenv
 import pytest
 from selene import browser, be, have
 from selenium import webdriver
@@ -23,6 +26,9 @@ def pytest_addoption(parser):
         choices=['100', '99'],
         default='100'
     )
+@pytest.fixture(scope="session", autouse=True)
+def load_env():
+    load_dotenv()
 @pytest.fixture(scope="function")
 def open_selenoid(request):
     browser_version = request.config.getoption('--vbrowser')
@@ -37,8 +43,10 @@ def open_selenoid(request):
         }
     }
     options.capabilities.update(selenoid_capabilities)
+    login = os.getenv('LOGIN')
+    password = os.getenv('PASSWORD')
     driver = webdriver.Remote(
-        command_executor="https://user1:1234@selenoid.autotests.cloud/wd/hub",
+        command_executor=f"https://{login}:{password}@selenoid.autotests.cloud/wd/hub",
         options=options)
     browser.config.driver = driver
     browser.open('https://demoqa.com/automation-practice-form')
