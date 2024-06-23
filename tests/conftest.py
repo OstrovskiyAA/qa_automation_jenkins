@@ -4,7 +4,7 @@ from selene import browser, be, have
 from selenium import webdriver
 from utils import attach
 from selenium.webdriver.chrome.options import Options
-#Без селенида:
+#Без селеноида:
 # @pytest.fixture(scope="function")
 # def open():
     # browser.open('https://demoqa.com/automation-practice-form')
@@ -14,13 +14,21 @@ from selenium.webdriver.chrome.options import Options
     # attach.add_screenshot(browser)
     # browser.quit()
 
-    # С селенидом:
+    # С селеноидом:
+def pytest_addoption(parser):
+    parser.addoption(
+        '--vbrowser',
+        help='Версия браузера',
+        choices=['100', '99'],
+        default='100'
+    )
 @pytest.fixture(scope="function")
-def open_selenoid():
+def open_selenoid(request):
+    browser_version = request.config.getoption('--vbrowser')
     options = Options()
     selenoid_capabilities = {
         "browserName": "chrome",
-        "browserVersion": "100.0",
+        "browserVersion": browser_version,
         "selenoid:options": {
             "enableVideo": True,
             "enableVNC": True
@@ -28,8 +36,8 @@ def open_selenoid():
     }
     options.capabilities.update(selenoid_capabilities)
     driver = webdriver.Remote(
-    command_executor="https://user1:1234@selenoid.autotests.cloud/wd/hub",
-    options=options)
+        command_executor="https://user1:1234@selenoid.autotests.cloud/wd/hub",
+        options=options)
     browser.config.driver = driver
     browser.open('https://demoqa.com/automation-practice-form')
     yield browser
