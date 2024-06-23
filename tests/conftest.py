@@ -15,6 +15,7 @@ from selenium.webdriver.chrome.options import Options
     # browser.quit()
 
     # С селеноидом:
+DEFAULT_BROWSER_VERSION ='100'
 def pytest_addoption(parser):
     parser.addoption(
         '--vbrowser',
@@ -25,6 +26,7 @@ def pytest_addoption(parser):
 @pytest.fixture(scope="function")
 def open_selenoid(request):
     browser_version = request.config.getoption('--vbrowser')
+    browser_version = browser_version if browser_version != '' else DEFAULT_BROWSER_VERSION
     options = Options()
     selenoid_capabilities = {
         "browserName": "chrome",
